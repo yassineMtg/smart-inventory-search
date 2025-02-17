@@ -97,6 +97,18 @@ To evaluate the success of the Smart Inventory Search system, we will use the fo
 
 ---
 
+### **Dataset**
+
+The dataset used for this project is the **Rakuten France Multimodal Product Classification Dataset**, available on Kaggle. It contains product data with images and text descriptions, making it ideal for training and evaluating multimodal search systems.
+
+- **Dataset Name**: Rakuten France Multimodal Product Classification
+- **Source**: [Kaggle](https://www.kaggle.com/datasets/moussasacko/rakuten-france-multimodal-product-classification)
+- **Download Command**:
+  ```bash
+  kaggle datasets download moussasacko/rakuten-france-multimodal-product-classification
+
+---
+
 ### **Proof of Concept (PoC)**
 
 The PoC will be built using **Streamlit**, allowing users to input search queries and view relevant product results in real-time. The PoC will be deployed on **Hugging Face Spaces** for easy access and sharing.
