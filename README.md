@@ -50,7 +50,7 @@ This project falls under the **Software 2.0** archetype, where traditional rule-
 
 #### **Feasibility & Baseline Model**
 
-To establish feasibility, we use a pre-trained NLP model as a baseline and fine-tune it on domain-specific inventory queries. The combination of **DistilBERT** and **Gemini API** ensures an optimal balance between accuracy, speed, and contextual understanding.
+To establish feasibility, I am using a pre-trained NLP model as a baseline and fine-tune it on domain-specific inventory queries. The combination of **DistilBERT** and **Gemini API** ensures an optimal balance between accuracy, speed, and contextual understanding.
 
 | Model Name         | Developer     | Purpose                                | Performance      |
 |--------------------|---------------|----------------------------------------|------------------|
@@ -86,7 +86,7 @@ By fine-tuning DistilBERT on structured inventory datasets and leveraging Gemini
 
 ### **Metrics for Business Goal Evaluation**
 
-To evaluate the success of the Smart Inventory Search system, we will use the following metrics:
+To evaluate the success of the Smart Inventory Search system, I will use the following metrics:
 
 1. **Search Accuracy**:
    - Precision, recall, and F1 score for product retrieval.
