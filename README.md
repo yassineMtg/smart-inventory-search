@@ -115,6 +115,11 @@ The PoC will be built using **Streamlit**, allowing users to input search querie
 
 #### **Steps to Set Up the PoC**
 
-1. Clone the repository:
+1. Clone the repository: (Make sure to install lfs using this command 'git lfs install')
    ```bash
-   git clone https://github.com/your-username/Smart-Inventory-Search.git
+   git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
+   ```
+   If you want to clone without large files - just their pointers
+   ```bash
+   GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
+   ```
