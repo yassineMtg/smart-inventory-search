@@ -329,10 +329,3 @@ git add datasets/dataset-all.csv.dvc
 git commit -m "Track dataset with DVC"
 dvc push
 
-📌 Next Steps
-
-In the upcoming milestones, we will:
-
-    ✅ Integrate the ML model into the pipeline
-    ✅ Deploy the search system using Streamlit
-    ✅ Optimize search accuracy and user experience
