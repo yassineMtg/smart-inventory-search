@@ -123,3 +123,216 @@ The PoC will be built using **Streamlit**, allowing users to input search querie
    ```bash
    GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
    ```
+
+
+
+Milestone 3 (Data Processing and Pipeline Automation)
+📌 Objective
+
+The goal of this milestone is to automate data processing, validation, and ingestion using ZenML, while ensuring data versioning (DVC) and storage in MySQL.
+Business Case
+
+Managing large inventories requires efficient product retrieval. Traditional keyword-based search mechanisms are inefficient and lead to:
+
+    Increased operational costs due to manual searches.
+    Lost sales opportunities because of vague product descriptions.
+    Poor user experience from irrelevant search results.
+
+By implementing Smart Inventory Search, powered by machine learning (ML), businesses can benefit from faster, more accurate product discovery.
+📌 Project Architecture
+
+To manage the data lifecycle, we use the following tools:
+
+    ✅ ZenML → Automates the ML pipeline for data ingestion, preprocessing, and validation.
+    ✅ DVC (Data Version Control) → Tracks dataset versions and ensures reproducibility.
+    ✅ MySQL → Stores raw and processed data.
+    ✅ Great Expectations → Validates data integrity before ingestion.
+
+📌 Pipeline Workflow
+
+1️⃣ Data Ingestion → 2️⃣ Data Preprocessing → 3️⃣ Data Validation → 4️⃣ Storing in MySQL
+
+1️⃣ Data Ingestion
+
+We fetch the dataset and store it in MySQL.
+📜 Implementation
+Database Connection (db_connection.py)
+
+from sqlalchemy import create_engine
+
+# Database connection details
+DB_NAME = "zenml_metadata"
+DB_USER = "root"
+DB_PASS = "8520"
+DB_HOST = "localhost"
+DB_PORT = "3306"
+
+def get_db_engine():
+    """Create and return a database engine."""
+    return create_engine(f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+
+Storing Data (store_data.py)
+
+import pandas as pd
+from database.db_connection import get_db_engine
+
+# Load the dataset
+df = pd.read_csv("./datasets/dataset-all.csv")
+
+# Store data in MySQL
+engine = get_db_engine()
+df.to_sql("raw_data", engine, if_exists="replace", index=False)
+
+print("✅ Data successfully stored in MySQL!")
+
+Running Data Ingestion
+
+python scripts/store_data.py
+
+2️⃣ Data Preprocessing (ZenML Pipeline)
+
+Once the data is ingested, we use ZenML to fetch and preprocess it.
+📌 Pipeline Overview
+
+    🔹 Step 1: Fetch data from MySQL
+    🔹 Step 2: Apply preprocessing (lowercasing, text cleaning)
+    🔹 Step 3: Store processed data back into MySQL
+
+📜 Implementation
+Pipeline Definition (preprocessing_pipeline.py)
+
+from pipelines.custom_materializer import PandasMaterializer
+from zenml import pipeline, step
+import pandas as pd
+import re
+from database.db_connection import get_db_engine
+from sqlalchemy.sql import text
+
+@step(output_materializers=PandasMaterializer)
+def fetch_data() -> pd.DataFrame:
+    """Fetch raw data from MySQL using the centralized connection."""
+    engine = get_db_engine()
+    with engine.connect() as connection:
+        df = pd.read_sql(text("SELECT * FROM raw_data"), connection)
+    return df
+
+@step(output_materializers=PandasMaterializer)
+def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Preprocess text and transform features."""
+    df["text"] = df["text"].str.lower()
+    df["text"] = df["text"].apply(lambda x: re.sub(r"\W+", " ", x))
+    return df
+
+@step
+def store_preprocessed_data(df: pd.DataFrame):
+    """Store preprocessed data into MySQL."""
+    engine = get_db_engine()
+    df.to_sql("processed_data", engine, if_exists="replace", index=False)
+    print("✅ Preprocessed data stored in MySQL!")
+
+@pipeline
+def preprocessing_pipeline():
+    """ZenML Preprocessing Pipeline"""
+    raw_data = fetch_data()
+    processed_data = preprocess_data(raw_data)
+    store_preprocessed_data(processed_data)
+
+Running the Pipeline
+
+python scripts/run_preprocessing.py
+
+3️⃣ Data Validation (Great Expectations)
+
+Before storing processed data, we validate it using Great Expectations.
+📜 Implementation
+
+The validation pipeline checks:
+
+    ✔ No missing values
+    ✔ Proper text formatting
+    ✔ Consistency in column names
+
+Validation Script (run_validation.py)
+
+import great_expectations as ge
+from database.db_connection import get_db_engine
+import pandas as pd
+
+# Load processed data
+engine = get_db_engine()
+df = pd.read_sql("SELECT * FROM processed_data", con=engine)
+
+# Validate data
+ge_df = ge.from_pandas(df)
+expectation_suite = ge_df.expect_column_values_to_not_be_null("text")
+
+if expectation_suite["success"]:
+    print("✅ Data validation passed!")
+else:
+    print("❌ Data validation failed. Check data quality.")
+
+Running Data Validation
+
+python scripts/run_validation.py
+
+4️⃣ Data Versioning (DVC)
+
+To ensure reproducibility, we use DVC to track dataset versions.
+Setting Up DVC
+
+dvc init
+dvc add datasets/dataset-all.csv
+git add .gitignore datasets/dataset-all.csv.dvc
+git commit -m "Track dataset version with DVC"
+
+Pushing Data to Remote Storage
+
+dvc remote add origin /path/to/remote
+dvc push
+
+📌 Proof of Concept (PoC)
+
+The PoC will be built using Streamlit, allowing users to input search queries and view relevant product results in real-time.
+Steps to Set Up the PoC
+
+    Clone the repository: (Make sure to install lfs using this command git lfs install)
+
+git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
+
+If you want to clone without large files - just their pointers
+
+    GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
+
+🚀 Key Achievements in Milestone 3
+
+✅ Stored raw data into MySQL
+✅ Implemented ZenML pipeline for data preprocessing
+✅ Validated data with Great Expectations
+✅ Tracked dataset versions using DVC
+✅ Ensured full automation with ZenML
+✅ Final Steps
+
+To ensure everything runs correctly, execute the following commands in order:
+
+# 1️⃣ Store raw data
+python scripts/store_data.py
+
+# 2️⃣ Run preprocessing pipeline
+python scripts/run_preprocessing.py
+
+# 3️⃣ Validate processed data
+python scripts/run_validation.py
+
+# 4️⃣ Track dataset version
+dvc add datasets/dataset-all.csv
+git add datasets/dataset-all.csv.dvc
+git commit -m "Track dataset with DVC"
+dvc push
+
+📌 Next Steps
+
+In the upcoming milestones, we will:
+
+    ✅ Integrate the ML model into the pipeline
+    ✅ Deploy the search system using Streamlit
+    ✅ Optimize search accuracy and user experience
