@@ -124,6 +124,7 @@ The PoC will be built using **Streamlit**, allowing users to input search querie
    GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/spaces/yassinemtg/smart-inventory-search
    ```
 
+---
 
 # Milestone 3 (Data Acquisition Validation and Preparation)
 
@@ -168,6 +169,7 @@ Businesses rely on structured and accessible data storage to power machine learn
 ### **Code Implementation**
 
 #### **1️⃣ Database Connection (`db_connection.py`)**
+
 ```python
 from sqlalchemy import create_engine
 
@@ -261,15 +263,13 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
 
 📷 *Screenshots:*  
 
-- **`images/preprocessing_pipeline_output.png`** – Running the preprocessing pipeline.
-- ![Running the preprocessing pipeline](images/preprocessing_pipeline_output.png)
+![Running the preprocessing pipeline](./images/preprocessing_pipeline_log.png)
 
 ---
 
 ####**3️⃣ Verifying Processed Data in MySQL**
 
-- **`images/mysql_processed_data_query.png`** – Output of MySQL query confirming processed data.
-- ![Output of MySQL query confirming processed data](images/mysql_processed_data_query.png)
+![Output of MySQL query confirming processed data](images/mysql_query_processed_output.png)
 
 
 ### **Step 3: Data Validation**
@@ -329,11 +329,9 @@ def validate_data(df: pd.DataFrame) -> pd.DataFrame:
 
 📷 *Screenshots:*  
 
-- **`images/validation_pipeline_log.png`** – Execution log of run_validation.py
-- ![Execution log of run_validation.py](images/validation_pipeline_log.png)
+![Execution log of run_validation.py](images/validation_pipeline_log.png)
 
-- **`images/mysql_query_validated_output.png`** – Output of MySQL query confirming validated data.
-- ![Output of MySQL query confirming validated data](images/mysql_query_validated_output.png)
+![Output of MySQL query confirming validated data](images/mysql_query_validated_output.png)
 
 ---
 
@@ -396,7 +394,8 @@ def log_dataset_version(step_name, version):
 ```
 
 📷 *Screenshots:*  
-- **`mlflow_version_log.png`** – Database snapshot showing dataset versions.
+
+![Database snapshot showing dataset versions](images/mlflow_version_log.png)
 
 ---
 
@@ -460,10 +459,17 @@ customer_feature_view = FeatureView(
 )
 ```
 
+---
+
+- Running:
+
+```bash
+feast apply
+```
+
 📷 *Screenshots:*  
 
-- **`feast_apply_log.png`** – Running `feast apply`.
-
+![Running `feast apply`](images/feast_apply_log.png)
 
 ---
 
@@ -568,18 +574,15 @@ python scripts/run_pipeline.py
 
 ---
 
-output ==>
+- output ==>
 
-- **`ml_pipeline_logs.png`** → Whole Pipeline execution
+![Whole Pipeline execution](images/ml_pipeline_logs.png)
 
 - Prefect Pipeline UI:
-
-- **`prefect_pipeline_ui.png`** → Prefect pipeline execution visualization.
+![Prefect pipeline execution visualization](images/prefect_pipeline_ui.png)
 
 - MLflow experiment logs:
-
-- **`mlflow_experiment_tracking.png`** → MLflow experiment logs.
-
+![MLflow experiment logs](images/mlflow_experiment_tracking.png)
 
 
 
