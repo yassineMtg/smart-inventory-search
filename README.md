@@ -576,7 +576,7 @@ python scripts/run_pipeline.py
 
 - output ==>
 
-![Whole Pipeline execution](images/ml_pipeline_logs.png)
+![Whole Pipeline execution](images/ml_pipeline_log.png)
 
 - Prefect Pipeline UI:
 ![Prefect pipeline execution visualization](images/prefect_pipeline_ui.png)
