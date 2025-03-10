@@ -1,0 +1,21 @@
+project: feature_store
+registry: data/registry.db
+provider: local
+
+# Offline store (Parquet files)
+offline_store:
+    type: file
+
+# Online store (MySQL)
+online_store:
+    type: mysql
+    host: "127.0.0.1"
+    port: 3306
+    database: "mlflow_metadata"
+    user: "root"
+    password: "8520"
+
+entity_key_serialization_version: 2
+auth:
+    type: no_auth
+

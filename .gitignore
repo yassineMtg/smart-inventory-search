@@ -1,0 +1,19 @@
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+mlops-env/
+
+# Ignore dataset and feature store files
+datasets/
+feature_store/data/
+
+# Ignore MLflow and Prefect metadata
+mlruns/
+prefect/
+
+# Ignore system files
+.DS_Store
+*.log
