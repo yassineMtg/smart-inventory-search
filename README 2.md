@@ -406,6 +406,6 @@ python pipeline.py
 
 Output:
 
-![TFX version](./images/pipeline_output.png)
+![Whole Pipeline Output](./images/pipeline_output.png)
 
 ---
