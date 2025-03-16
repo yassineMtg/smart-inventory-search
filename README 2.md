@@ -311,7 +311,7 @@ def preprocessing_fn(inputs):
 Run the script with:
 
 ```bash
-python 
+python scripts/preprocessing_pipeline.py
 ```
 
 Output:
